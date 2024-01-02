@@ -6,11 +6,11 @@ const {
   getTodos,
 } = require("../controllers/Todo.controller");
 
+const { inputValidator } = require("../middleware/inputValidationMiddleWare")
+
 router.get("/getTodos", getTodos);
 
-router.post("/addTodo", CheckRedudancy, addTodo);
-router.put("/updateTodo", isTodoExist, updateTodo); 
-
-
+router.post("/addTodo", inputValidator, CheckRedudancy, addTodo);
+router.put("/updateTodo", inputValidator, isTodoExist, updateTodo);
 
 module.exports = router;

@@ -1,12 +1,12 @@
 const { Todo } = require("../model/Todo");
-const moment = require("moment");
-const DATEFORMAT = "YYYY-MM-DD";
+const { convertToDate } = require("../middleware/dateObjectMiddleWare");
+
 const addTodo = async (req, res) => {
   try {
     const { name, date } = req.body;
-    const dateObject = moment(date, DATEFORMAT);
+    const dateObject = convertToDate(date);
 
-    const createdTodo = await Todo.create({ name: name, date: dateObject });
+    const createdTodo = await Todo.create({ name, date: dateObject });
     return res.status(201).json(createdTodo);
   } catch (err) {
     console.error(err);
@@ -17,9 +17,9 @@ const addTodo = async (req, res) => {
 const updateTodo = async (req, res) => {
   try {
     const { name, date } = req.body;
-    const updateQuery = { name: name };
+    const updateQuery = { name };
     if (date) {
-      const dateObject = moment(date, DATEFORMAT);
+      const dateObject = convertToDate(date);
       updateQuery.$set = { date: dateObject };
     }
     const updatedTodo = await Todo.updateOne(updateQuery);
@@ -43,4 +43,5 @@ const getTodos = async (req, res) => {
     return res.status(500).json("Internal Server Error");
   }
 };
+
 module.exports = { addTodo, updateTodo, getTodos };
