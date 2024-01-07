@@ -4,6 +4,7 @@ function App() {
   return (
     <div>
       <CreateTodo></CreateTodo>
+      <Todos></Todos>
     </div>
   )
     

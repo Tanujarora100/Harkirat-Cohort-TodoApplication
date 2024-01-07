@@ -3,10 +3,14 @@ const { convertToDate } = require("../middleware/dateObjectMiddleWare");
 
 const addTodo = async (req, res) => {
   try {
-    const { name, date } = req.body;
+    const { name, date, description } = req.body;
     const dateObject = convertToDate(date);
 
-    const createdTodo = await Todo.create({ name, date: dateObject });
+    const createdTodo = await Todo.create({
+      name,
+      date: dateObject,
+      description: description,
+    });
     return res.status(201).json(createdTodo);
   } catch (err) {
     console.error(err);
@@ -16,11 +20,12 @@ const addTodo = async (req, res) => {
 
 const updateTodo = async (req, res) => {
   try {
-    const { name, date } = req.body;
+    const { name, date, description } = req.body;
     const updateQuery = { name };
     if (date) {
       const dateObject = convertToDate(date);
       updateQuery.$set = { date: dateObject };
+      updateQuery.$set = { description: description };
     }
     const updatedTodo = await Todo.updateOne(updateQuery);
     const message =
